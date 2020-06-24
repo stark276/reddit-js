@@ -13,6 +13,10 @@ const PostSchema = new Schema({
  summary: {
   type: String,
   required: true
+ },
+ subreddit: {
+  type: String,
+  required: true
  }
 });
 
