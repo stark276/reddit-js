@@ -19,16 +19,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
-require('./controllers/posts.js')(app);
+
 
 // Add after body parser initialization!
 app.use(expressValidator());
 
 app.engine('handlebars', hbs.engine);
 
-
+require('./controllers/posts.js')(app);
+require('./controllers/comments.js')(app);
 // Set db
 require('./data/reddit-db');
+
 
 
 
