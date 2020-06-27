@@ -6,13 +6,15 @@
  </div>
 </div>
 <form action="/posts/{{post._id}}/comments" method="post">
- <textarea class='form-control' name="content" placeholder="Comment"></textarea>
+ <textarea class='form-control' name="content" placeholder="Add comment"></textarea>
  <div class="text-right">
   <button type="submit" class="btn btn-primary">Save</button>
  </div>
-
+<div>
+ <h2>Comments</h2>
  {{#each post.comments}}
   <p>{{this.content}}</p>
+  <hr>
  {{/each}}
-
+</div>
 </form>
