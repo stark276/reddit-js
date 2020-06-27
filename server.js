@@ -1,8 +1,12 @@
 const express = require('express')
-const app = express()
+
 const bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const app = express()
 const expressValidator = require('express-validator');
 const handlebars = require('handlebars');
+require('dotenv').config();
 const {
   allowInsecurePrototypeAccess
 } = require('@handlebars/allow-prototype-access');
@@ -13,8 +17,8 @@ const hbs = exphbs.create({
 });
 app.set('view engine', 'handlebars');
 
-
 // Use Body Parser
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
@@ -28,6 +32,7 @@ app.engine('handlebars', hbs.engine);
 
 require('./controllers/posts.js')(app);
 require('./controllers/comments.js')(app);
+require('./controllers/auth.js')(app);
 // Set db
 require('./data/reddit-db');
 
