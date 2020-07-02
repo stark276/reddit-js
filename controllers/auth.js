@@ -16,11 +16,14 @@ app.post("/login", (req, res) => {
   const password = req.body.password;
   // Find this user name
   User.findOne({ username }, "username password")
+     
     .then(user => {
+      console.log(user)
       if (!user) {
         // User not found
         return res.status(401).send({ message: "Wrong Username or Password" });
       }
+      // console.log(username)
       // Check the password
       user.comparePassword(password, (err, isMatch) => {
         if (!isMatch) {
@@ -34,6 +37,7 @@ app.post("/login", (req, res) => {
         // Set a cookie and redirect to root
         res.cookie("nToken", token, { maxAge: 900000, httpOnly: true });
         res.redirect("/");
+        // console.log(token)
       });
     })
     .catch(err => {
@@ -46,19 +50,18 @@ app.post("/login", (req, res) => {
     res.redirect('/');
   });
 
-  // SIGN UP POST
+ // SIGN UP POST
 app.post("/sign-up", (req, res) => {
   // Create User and JWT
   const user = new User(req.body);
-  const SECRET = process.env.SECRET
-  console.log(SECRET)
+ 
+  SECRET = process.env.SECRET
   user
-    .save().then((user) => {
+    .save()
+    .then(user => {
       var token = jwt.sign({ _id: user._id }, SECRET, { expiresIn: "60 days" });
-      res.cookie('nToken', token, { maxAge: 900000, httpOnly: true });
-      res.redirect('/');
-      })
-    
+      res.redirect("/");
+    })
     .catch(err => {
       console.log(err.message);
       return res.status(400).send({ err: err });

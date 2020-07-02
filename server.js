@@ -17,6 +17,9 @@ const hbs = exphbs.create({
 });
 app.set('view engine', 'handlebars');
 
+
+
+
 // Use Body Parser
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -30,16 +33,31 @@ app.use(expressValidator());
 
 app.engine('handlebars', hbs.engine);
 
+
+
+var checkAuth = (req, res, next) => {
+  console.log("Checking authentication");
+  if (typeof req.cookies.nToken === "undefined" || req.cookies.nToken === null) {
+    req.user = null;
+  } else {
+    var token = req.cookies.nToken;
+    var decodedToken = jwt.decode(token, { complete: true }) || {};
+    req.user = decodedToken.payload;
+  }
+
+  next();
+};
+app.use(checkAuth);
+
+require('./controllers/auth.js')(app);
 require('./controllers/posts.js')(app);
 require('./controllers/comments.js')(app);
-require('./controllers/auth.js')(app);
+
 // Set db
 require('./data/reddit-db');
-
-
-
 
 app.listen(3000, () => {
  console.log('App listening on port 3000!')
 })
 module.exports = app;
+
